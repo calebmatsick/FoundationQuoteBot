@@ -59,3 +59,14 @@ def replied_comments():
 # Main check
 if __name__ == "__main__":
     pass
+
+username = ""
+password = ""
+client_id = ""
+client_secret = ""
+
+
+/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[8]/div/div[1]/div[1]/text()[1]
+
+/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[1]/div[1]/div[1]/text()[1]
+/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[2]/div[1]/div[1]/text()[1]
