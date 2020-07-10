@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # Necessary imports
 import secrets
 import os
