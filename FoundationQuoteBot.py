@@ -1,22 +1,10 @@
 # Necessary imports
-import config
+import secrets
 import os
 import praw
 
 from selenium import webdriver
-
-# Scrapes quotes from the Goodreads website
-def getQuote():
-    # Use chrome to drive the scrape
-    DRIVER_PATH = '/home/firstcitizen/Documents/Dev/GitHub/FoundationQuoteBot/'
-    driver = webdriver.Chrome(executable_path=DRIVER_PATH)
-
-    # Gets the Goodreads website
-    driver.get('https://www.goodreads.com/work/quotes/1783981-foundation')
-
-    quoteNumber = 1
-    
-    /html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[quoteNumber]/div[1]/div[1]/text()[1]
+from selenium.webdriver.chrome.options import Options
 
 
 # Authentication function
@@ -30,6 +18,31 @@ def authenticate():
     print("Authenticated.")
     return session
 
+
+# Scrapes quotes from the Goodreads website
+def getQuote():
+    # Use headless browser
+    options = Options()
+    options.headless = True
+    options.add_argument('--no-sandbox')
+    
+    # Use chrome to drive the scrape
+    DRIVER_PATH = '/home/firstcitizen/Documents/Dev/GitHub/FoundationQuoteBot/'
+    driver = webdriver.Chrome(executable_path=DRIVER_PATH)
+
+    # Gets the Goodreads website
+    driver.get('https://www.goodreads.com/work/quotes/1783981-foundation')
+
+    # Iterates to get subsequent quotes from Goodreads
+    quoteNumber = 1
+    
+    # Get element and print value
+    elem = driver.find_element_by_xpath('/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[' + quoteNumber + ']/div[1]/div[1]/text()[1]')
+    quote = elem.text
+
+    # Return the scraped quote
+    return quote
+    
 
 # Driver for the script
 def main():
