@@ -2,7 +2,21 @@
 import config
 import os
 import praw
-import selenium
+
+from selenium import webdriver
+
+# Scrapes quotes from the Goodreads website
+def getQuote():
+    # Use chrome to drive the scrape
+    DRIVER_PATH = '/home/firstcitizen/Documents/Dev/GitHub/FoundationQuoteBot/'
+    driver = webdriver.Chrome(executable_path=DRIVER_PATH)
+
+    # Gets the Goodreads website
+    driver.get('https://www.goodreads.com/work/quotes/1783981-foundation')
+
+    quoteNumber = 1
+    
+    /html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[quoteNumber]/div[1]/div[1]/text()[1]
 
 
 # Authentication function
@@ -59,14 +73,3 @@ def replied_comments():
 # Main check
 if __name__ == "__main__":
     pass
-
-username = ""
-password = ""
-client_id = ""
-client_secret = ""
-
-
-/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[8]/div/div[1]/div[1]/text()[1]
-
-/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[1]/div[1]/div[1]/text()[1]
-/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[2]/div[1]/div[1]/text()[1]
