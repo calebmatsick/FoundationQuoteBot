@@ -11,10 +11,10 @@ from selenium.webdriver.chrome.options import Options
 def authenticate():
     print("Authenticating...")
     session = praw.Reddit(user_agent = 'Foundation\'s Edge\'s first Robot!',
-                    username = config.username,
-                    password = config.password,
-                    client_id = config.client_id,
-                    client_secret = config.client_secret)
+                    username = secrets.username,
+                    password = secrets.password,
+                    client_id = secrets.client_id,
+                    client_secret = secrets.client_secret)
     print("Authenticated.")
     return session
 
@@ -42,7 +42,7 @@ def getQuote():
 
     # Return the scraped quote
     return quote
-    
+
 
 # Driver for the script
 def main():
@@ -81,6 +81,20 @@ def replied_comments():
     with open('C:/Users/caleb/Documents/Computer Science/PythonProjects/replies.txt') as f:
         replies = f.read().splitlines()
     return replies
+
+
+# Counts the number of times the script is run to know which quote to scrape
+def getTimesRun(filename="timesRun.dat"):
+        # Opens data file
+        with open(filename, "a+") as f:
+            f.seek(0)
+            timesRun = int(f.read() or 0) + 1
+            f.seek(0)
+            f.truncate()
+            f.write(str(timesRun))
+
+        # Returns the total times the script has been run
+        return timesRun
 
 
 # Main check
