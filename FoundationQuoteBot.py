@@ -46,7 +46,7 @@ def getQuote(timesRun):
     options.add_argument('--no-sandbox')
     
     # Use chrome to drive the scrape
-    DRIVER_PATH = '/home/firstcitizen/Documents/Dev/GitHub/FoundationQuoteBot/'
+    DRIVER_PATH = '/home/firstcitizen/Documents/Dev/GitHub/FoundationQuoteBot/chromedriver'
     driver = webdriver.Chrome(executable_path=DRIVER_PATH)
 
     # Helps decide which page of quotes should be used to select quotes
