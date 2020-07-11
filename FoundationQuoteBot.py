@@ -11,23 +11,23 @@ from selenium import webdriver
 
 # Authenticates bot to Reddit
 def authenticate():
-    print("Authenticating...")
+    print('Authenticating...')
 
     # Creates reddit using Praw and secrets
-    reddit = praw.Reddit(user_agent = 'Foundation\'s Edge\'s first Robot!',
+    reddit = praw.Reddit(user_agent = 'Foundation\'s Edge\'s Quote Robot!',
                     username = secrets.username,
                     password = secrets.password,
                     client_id = secrets.client_id,
                     client_secret = secrets.client_secret)
 
-    print("Authenticated.")
+    print('Authenticated.')
     return reddit
 
 
 # Counts the number of times the script is run to know which quote to scrape
-def getTimesRun(filename="timesRun.dat"):
+def getTimesRun(filename='timesRun.dat'):
         # Opens data file
-        with open(filename, "a+") as f:
+        with open(filename, 'a+') as f:
             f.seek(0)
             timesRun = int(f.read() or 0) + 1
             f.seek(0)
@@ -55,8 +55,8 @@ def getQuote(timesRun):
     # Gets the Goodreads website
     driver.get('https://www.goodreads.com/work/quotes/1783981-foundation?=page' + pageNumber)
 
-    # Iterates to get subsequent quotes from Goodreads
-    quoteNumber = 1
+    # Uses the number of times the script has been run to get an appropriate quote
+    quoteNumber = timesRun
     
     # Get element and print value
     elem = driver.find_element_by_xpath('/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[' + quoteNumber + ']/div[1]/div[1]/text()[1]')
@@ -91,7 +91,7 @@ def postQuote(reddit, quote, timesRun):
     selftext = quote + '\n\nIsaac Asimov'
 
     # Makes the post
-    reddit.subreddit(sub).submit(title, selftext)
+    sub.submit(title, selftext)
 
 
 # Main check
