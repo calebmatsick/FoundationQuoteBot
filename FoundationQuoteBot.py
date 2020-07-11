@@ -14,7 +14,7 @@ def authenticate():
     print('Authenticating...')
 
     # Creates reddit using Praw and secrets
-    reddit = praw.Reddit(user_agent = 'Foundation\'s Edge\'s Quote Robot!',
+    reddit = praw.Reddit(user_agent = '/r/FoundationsEdge Quote Bot!',
                     username = secrets.username,
                     password = secrets.password,
                     client_id = secrets.client_id,
@@ -96,4 +96,4 @@ def postQuote(reddit, quote, timesRun):
 
 # Main check
 if __name__ == "__main__":
-    pass
+    main()
