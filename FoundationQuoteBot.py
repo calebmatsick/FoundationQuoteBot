@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 # Necessary imports
+import math
 import os
 import praw
 import secrets
@@ -38,7 +39,7 @@ def getTimesRun(filename="timesRun.dat"):
 
 
 # Scrapes quotes from the Goodreads website
-def getQuote():
+def getQuote(timesRun):
     # Use headless browser
     options = Options()
     options.headless = True
@@ -48,8 +49,11 @@ def getQuote():
     DRIVER_PATH = '/home/firstcitizen/Documents/Dev/GitHub/FoundationQuoteBot/'
     driver = webdriver.Chrome(executable_path=DRIVER_PATH)
 
+    # Helps decide which page of quotes should be used to select quotes
+    pageNumber = math.floor(timesRun / 30) + 1
+
     # Gets the Goodreads website
-    driver.get('https://www.goodreads.com/work/quotes/1783981-foundation')
+    driver.get('https://www.goodreads.com/work/quotes/1783981-foundation?=page' + pageNumber)
 
     # Iterates to get subsequent quotes from Goodreads
     quoteNumber = 1
@@ -67,11 +71,11 @@ def main():
     # Authenticates bot
     reddit = authenticate()
 
-    # Gets the quote to post
-    quote = getQuote()
-
     # Gets the number of times the script has been run
     timesRun = getTimesRun()
+
+    # Gets the quote to post
+    quote = getQuote(timesRun)
 
     # Posts the quote to the subreddit
     postQuote(reddit, quote, timesRun)
@@ -84,7 +88,7 @@ def postQuote(reddit, quote, timesRun):
 
     # Variables needed to make the post
     title = 'QOTD #' + timesRun
-    selftext = quote
+    selftext = quote + '\n\nIsaac Asimov'
 
     # Makes the post
     reddit.subreddit(sub).submit(title, selftext)
