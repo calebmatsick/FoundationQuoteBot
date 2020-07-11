@@ -46,20 +46,20 @@ def getQuote(timesRun):
     options.add_argument('--no-sandbox')
     
     # Use chrome to drive the scrape
-    DRIVER_PATH = '/home/firstcitizen/Documents/Dev/GitHub/FoundationQuoteBot/chromedriver'
-    driver = webdriver.Chrome(executable_path=DRIVER_PATH)
+    DRIVER_PATH = '/usr/local/bin/chromedriver'
+    driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
 
     # Helps decide which page of quotes should be used to select quotes
     pageNumber = math.floor(timesRun / 30) + 1
 
     # Gets the Goodreads website
-    driver.get('https://www.goodreads.com/work/quotes/1783981-foundation?=page' + pageNumber)
+    driver.get('https://www.goodreads.com/work/quotes/1783981-foundation?=page' + str(pageNumber))
 
     # Uses the number of times the script has been run to get an appropriate quote
     quoteNumber = timesRun
     
     # Get element and print value
-    elem = driver.find_element_by_xpath('/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[' + quoteNumber + ']/div[1]/div[1]/text()[1]')
+    elem = driver.find_element_by_xpath('/html/body/div[2]/div[3]/div[1]/div[2]/div[3]/div[10]/div[' + str(quoteNumber) + ']/div[1]/div[1]')
     quote = elem.text
 
     # Return the scraped quote
@@ -87,8 +87,8 @@ def postQuote(reddit, quote, timesRun):
     sub = reddit.subreddit('FoundationsEdge')
 
     # Variables needed to make the post
-    title = 'QOTD #' + timesRun
-    selftext = quote + '\n\nIsaac Asimov'
+    title = 'QOTD #' + str(timesRun)
+    selftext = quote
 
     # Makes the post
     sub.submit(title, selftext)
