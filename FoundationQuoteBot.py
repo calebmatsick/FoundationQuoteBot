@@ -1,24 +1,40 @@
 #!/usr/bin/python
 
 # Necessary imports
-import secrets
 import os
 import praw
-
-from selenium import webdriver
+import secrets
 from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
 
 
-# Authentication function
+# Authenticates bot to Reddit
 def authenticate():
     print("Authenticating...")
-    session = praw.Reddit(user_agent = 'Foundation\'s Edge\'s first Robot!',
+
+    # Creates reddit using Praw and secrets
+    reddit = praw.Reddit(user_agent = 'Foundation\'s Edge\'s first Robot!',
                     username = secrets.username,
                     password = secrets.password,
                     client_id = secrets.client_id,
                     client_secret = secrets.client_secret)
+
     print("Authenticated.")
-    return session
+    return reddit
+
+
+# Counts the number of times the script is run to know which quote to scrape
+def getTimesRun(filename="timesRun.dat"):
+        # Opens data file
+        with open(filename, "a+") as f:
+            f.seek(0)
+            timesRun = int(f.read() or 0) + 1
+            f.seek(0)
+            f.truncate()
+            f.write(str(timesRun))
+
+        # Returns the total times the script has been run
+        return timesRun
 
 
 # Scrapes quotes from the Goodreads website
@@ -49,54 +65,29 @@ def getQuote():
 # Driver for the script
 def main():
     # Authenticates bot
-    session = authenticate()
+    reddit = authenticate()
 
-    # Gets comments
-    replies = replied_comments()
+    # Gets the quote to post
+    quote = getQuote()
 
-    # Replues to all appropriate comments
-    while True:
-        reply(session, replies)
+    # Gets the number of times the script has been run
+    timesRun = getTimesRun()
+
+    # Posts the quote to the subreddit
+    postQuote(reddit, quote, timesRun)
 
 
 # Finds comments with "mule" in it and then replies to them
-def reply(session, replies):
-    # Searches /r/FoundationsEdge for comments to reply to
-    sub = session.subreddit('FoundationsEdge')
-    comments = sub.stream.comments()
-    
-    # Looks through comments for the name "mule"
-    for comment in comments:
-        text = comment.body
+def postQuote(reddit, quote, timesRun):
+    # Selects /r/FoundationsEdge as the subreddit to post to
+    sub = reddit.subreddit('FoundationsEdge')
 
-        # If it contains mule, replies to comment
-        if "mule" in text.lower() and comment.id not in replies:
-            print ("User Indoctrinated")
-            comment.reply("Hail the First Citizen!")
-            replies.append(comment.id)
-            with open('C:/Users/caleb/Documents/Computer Science/PythonProjects/replies.txt', 'a') as f:
-                f.write (comment.id + "\n")
+    # Variables needed to make the post
+    title = 'QOTD #' + timesRun
+    selftext = quote
 
-
-# Opens replies that are in a file and formats them
-def replied_comments():
-    with open('C:/Users/caleb/Documents/Computer Science/PythonProjects/replies.txt') as f:
-        replies = f.read().splitlines()
-    return replies
-
-
-# Counts the number of times the script is run to know which quote to scrape
-def getTimesRun(filename="timesRun.dat"):
-        # Opens data file
-        with open(filename, "a+") as f:
-            f.seek(0)
-            timesRun = int(f.read() or 0) + 1
-            f.seek(0)
-            f.truncate()
-            f.write(str(timesRun))
-
-        # Returns the total times the script has been run
-        return timesRun
+    # Makes the post
+    reddit.subreddit(sub).submit(title, selftext)
 
 
 # Main check
